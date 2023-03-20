@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FirstSubmission</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="tab_title_1">Followers</string>
+    <string name="tab_title_2">Following</string>
+    <string name="username">Username</string>
+    <string name="followers">Followers</string>
+    <string name="followings">Followings</string>
+    <string name="profile_picture">Profile Picture</string>
+</resources>
