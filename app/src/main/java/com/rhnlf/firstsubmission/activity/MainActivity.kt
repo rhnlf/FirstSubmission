@@ -31,13 +31,13 @@ class MainActivity : AppCompatActivity() {
             rvGithub.setHasFixedSize(true)
         }
 
-        mainViewModel.listGithub.observe(this, { listGithub ->
+        mainViewModel.listGithub.observe(this) { listGithub ->
             setListData(listGithub)
-        })
+        }
 
-        mainViewModel.isLoading.observe(this, {
+        mainViewModel.isLoading.observe(this) {
             showLoading(it)
-        })
+        }
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = binding.searchView

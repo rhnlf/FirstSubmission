@@ -47,13 +47,13 @@ class DetailActivity : AppCompatActivity() {
             detailViewModel.getDetail(item)
         }
 
-        detailViewModel.detail.observe(this, { detail ->
+        detailViewModel.detail.observe(this) { detail ->
             setDetailData(detail)
-        })
+        }
 
-        detailViewModel.isLoading.observe(this, {
+        detailViewModel.isLoading.observe(this) {
             showLoading(it)
-        })
+        }
     }
 
     private fun setDetailData(detail: DetailUser) {

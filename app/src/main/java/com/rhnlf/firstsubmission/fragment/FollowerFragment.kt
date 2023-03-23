@@ -42,13 +42,13 @@ class FollowerFragment : Fragment() {
 
         viewModel.getFollower(username)
 
-        viewModel.followerList.observe(viewLifecycleOwner, { followerList ->
+        viewModel.followerList.observe(viewLifecycleOwner) { followerList ->
             binding.rvFollower.adapter = showFragmentRecycler(followerList)
-        })
+        }
 
-        viewModel.isLoading.observe(viewLifecycleOwner, {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
-        })
+        }
     }
 
     private fun showFragmentRecycler(followerList: List<User>?): MainAdapter {
