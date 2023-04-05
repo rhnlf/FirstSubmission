@@ -1,71 +1,53 @@
 package com.rhnlf.firstsubmission.activity
 
-import android.app.SearchManager
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.activity.viewModels
-import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.rhnlf.firstsubmission.view.MainViewModel
-import com.rhnlf.firstsubmission.adapter.MainAdapter
-import com.rhnlf.firstsubmission.data.User
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.rhnlf.firstsubmission.R
 import com.rhnlf.firstsubmission.databinding.ActivityMainBinding
+import com.rhnlf.firstsubmission.fragment.dataStore
+import com.rhnlf.firstsubmission.helper.SettingModelFactory
+import com.rhnlf.firstsubmission.helper.SettingPreferences
+import com.rhnlf.firstsubmission.view.SettingViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val mainViewModel by viewModels<MainViewModel>()
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val preferences = SettingPreferences.getInstance(dataStore)
+        val settingViewModel =
+            ViewModelProvider(this, SettingModelFactory(preferences))[SettingViewModel::class.java]
+
+        darkMode(settingViewModel)
+        setTheme(R.style.Theme_FirstSubmission)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.bottomNav.itemIconTintList = null
         supportActionBar?.hide()
 
-        val layoutManager = LinearLayoutManager(this)
-        binding.apply {
-            rvGithub.layoutManager = layoutManager
-            rvGithub.setHasFixedSize(true)
-        }
-
-        mainViewModel.listGithub.observe(this) { listGithub ->
-            setListData(listGithub)
-        }
-
-        mainViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = binding.searchView
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.queryHint = "Search Github User"
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                mainViewModel.apply {
-                    clearUserList()
-                    getGithub(query)
-                }
-                searchView.clearFocus()
-                return true
-            }
-
-            override fun onQueryTextChange(query: String): Boolean {
-                return false
-            }
-        })
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
+        navController = navHostFragment.navController
+        setupWithNavController(binding.bottomNav, navController)
     }
 
-    private fun showLoading(isLoading: Boolean?) {
-        binding.progressBar.visibility = if (isLoading == true) View.VISIBLE else View.GONE
-    }
+    private fun darkMode(settingViewModel: SettingViewModel) {
+        settingViewModel.getThemeSetting().observe(this) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-    private fun setListData(listGithub: List<User>) {
-        val adapter = MainAdapter(listGithub)
-        binding.rvGithub.adapter = adapter
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
     }
 }

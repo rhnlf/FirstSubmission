@@ -1,4 +1,4 @@
-package com.rhnlf.firstsubmission.api
+package com.rhnlf.firstsubmission.data.remote.api
 
 import com.rhnlf.firstsubmission.BuildConfig
 import okhttp3.OkHttpClient
@@ -10,17 +10,11 @@ class ApiConfig {
     companion object {
         fun getApiService(): ApiService {
             val loggingInterceptor =
-                if (BuildConfig.DEBUG)
-                    HttpLoggingInterceptor()
-                        .setLevel(
-                            HttpLoggingInterceptor
-                                .Level.BODY
-                        )
-                else HttpLoggingInterceptor()
-                    .setLevel(
-                        HttpLoggingInterceptor
-                            .Level.NONE
-                    )
+                if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+                } else {
+                    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+                }
             val client = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build()

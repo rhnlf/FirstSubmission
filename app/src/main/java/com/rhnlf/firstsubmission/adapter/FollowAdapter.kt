@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.rhnlf.firstsubmission.data.remote.response.UserResponse
+import com.rhnlf.firstsubmission.data.remote.response.FollowResponse
 import com.rhnlf.firstsubmission.databinding.ItemGithubBinding
 
-class MainAdapter(private val listData: List<UserResponse>) :
-    RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+class FollowAdapter(private val listData: List<FollowResponse>) :
+    RecyclerView.Adapter<FollowAdapter.ViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -23,7 +23,7 @@ class MainAdapter(private val listData: List<UserResponse>) :
         holder.binding.tvUsername.text = user.login
 
         Glide.with(holder.itemView.context)
-            .load(user.avatar_url)
+            .load(user.avatarUrl)
             .circleCrop()
             .into(holder.binding.ivProfile)
 
@@ -39,8 +39,8 @@ class MainAdapter(private val listData: List<UserResponse>) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: UserResponse)
+        fun onItemClicked(data: FollowResponse)
     }
 
-    class ViewHolder(val binding: ItemGithubBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemGithubBinding) : RecyclerView.ViewHolder(binding.root)
 }
